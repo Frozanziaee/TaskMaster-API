@@ -42,6 +42,14 @@ const UserSchema = new mongoose.Schema({
         maxLength: 50,
     },
 
+    profile: {
+        type: String,
+        default: "./profiles/demo_profile.jfif",
+    },
+
+    resetToken: {
+        type: mongoose.Types.ObjectId,
+      },
 })
 
 UserSchema.pre('save', async function (next) {
@@ -49,6 +57,14 @@ UserSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, salt)
     next()
 })
+
+UserSchema.pre("updateOne", async function (next) {
+    const update = this.getUpdate()
+    if (update && update.password) {
+      update.password = await bcrypt.hash(update.password, 10)
+    }
+    next()
+  })
 
 UserSchema.methods.createJWT = function () {
     return jwt.sign({userId: this._id, name: this.firstName}, process.env.JWT_SECRET , {

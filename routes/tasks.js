@@ -3,7 +3,7 @@ const router = express.Router()
 
 const { 
     getAllTasks,
-    getTask,
+    //getTask,
     createTask, 
     updateTask, 
     deleteTask 

@@ -1,35 +1,59 @@
 const mongoose = require('mongoose')
+const Project = require('./Project.js')
 
 const TasksSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, 'Please provide task title'],
-        maxLenght: 50
     },
     description: {
         type: String,
         required: [true, 'Please provide description'],
-        maxlenght: 300
     },
     assignee: {
-        type: String,
-        required: [true, 'Please provide assignee name'],
-        maxlenght: 60
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
     },
     status: {
         type: String,
         enum: ['In Progress', 'Completed', 'Not Started', 'Paused', 'Archived'],
+        message: "{VALUE} is not supported",
         default: 'Not Started'
     },
     deadline: {
         type: Date,
-        required: true,
+        required: [true, "Please provide task's deadline"],
     },
-    createdBy: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: [true, 'Please provide user']
+
+    project: {
+        type: Types.ObjectId,
+        ref: "Project",
+        required: [true, "Project id is required"],
     },
+   
 }, {timestamps: true})
+
+TasksSchema.post("save", async function () {
+    const projectId = this.project;
+    let fieldToInc = "";
+  
+    switch (this.status) {
+      case "completed":
+        fieldToInc = "completedTasks";
+        break;
+      case "in-progress":
+        fieldToInc = "inProgressTasks";
+        break;
+      default:
+        fieldToInc = "allTasks";
+    }
+    try {
+      await Project.findByIdAndUpdate(projectId, {
+        $inc: { [fieldToInc]: 1 },
+      });
+    } catch (error) {
+      return next(error);
+    }
+  });
 
 module.exports = mongoose.model('Task', TasksSchema)

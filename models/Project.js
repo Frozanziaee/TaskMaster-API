@@ -4,27 +4,38 @@ const ProjectsSchema = new mongoose.Schema({
     title: {
         type: String,
         required: [true, 'Please provide project title'],
-        maxLenght: 50
     },
     description: {
         type: String,
         required: [true, 'Please provide description '],
-        maxlenght: 300
     },
     manager: {
-        type: String,
-        required: [true, 'Please provide Manager name'],
-        maxlenght: 60
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
     },
     deadline: {
         type: Date,
-        required: true,
+        required: [true, "Please provide project's deadline"],
     },
-    createdBy: {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: [true, 'Please provide user']
-    },
+    
+    status: {
+        type: String,
+        enum: ["not-started", "in-progress", "completed"],
+        message: "{VALUE} not supported for project status",
+        default: "not-started",
+      },
+      allTasks:{
+        type: Number,
+        default: 0
+      },
+      inProgressTasks:{
+        type: Number,
+        default: 0
+      },
+      completedTasks:{
+        type: Number,
+        default: 0
+      },
 }, {timestamps: true})
 
 module.exports = mongoose.model('Project', ProjectsSchema)
