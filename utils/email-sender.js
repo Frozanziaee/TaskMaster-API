@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export default async function sendMail(user, url) {
+const sendMail = async (user, url) => {
   return await transporter.sendMail({
     to: user.email,
     subject: "TaskMaster Reset password",
@@ -527,3 +527,5 @@ export default async function sendMail(user, url) {
 </html>`,
   });
 }
+
+module.exports = sendMail

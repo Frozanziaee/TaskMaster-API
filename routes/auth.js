@@ -12,7 +12,7 @@ const {
 
 router.post('/signup', signup)
 router.post('/signin', signin)
-router.get("/signout", logoutUser);
+// router.get("/signout", logoutUser);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 

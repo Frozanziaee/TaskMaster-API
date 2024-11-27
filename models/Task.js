@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+
 const Project = require('./Project.js')
 
 const TasksSchema = new mongoose.Schema({
@@ -26,7 +27,7 @@ const TasksSchema = new mongoose.Schema({
     },
 
     project: {
-        type: Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Project",
         required: [true, "Project id is required"],
     },

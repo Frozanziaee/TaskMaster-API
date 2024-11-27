@@ -1,14 +1,8 @@
-const path = requir ("path")
-const { fileURLToPath } = require ("url")
-const fs = requir ("fs")
+const fs = require ("fs")
 
-// Define __dirname manually
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-export default function deleteOldProfile(url) {
+ const deleteOldProfile = (url) => {
   const idx = url.indexOf("/uploads/");
   const fileToDeletePath = url
-    // .replace(url.substring(0, idx), __dirname)
     .replace(url.substring(0, idx), "./public/")
     .replaceAll("/", "\\");
 
@@ -19,3 +13,5 @@ export default function deleteOldProfile(url) {
   }
   console.log(fileToDeletePath);
 }
+
+module.exports = deleteOldProfile
