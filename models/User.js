@@ -20,37 +20,31 @@ const UserSchema = new mongoose.Schema({
     firstName:{
         type: String,
         required: [true, 'Please provide first name'],
-        minLength: 3,
-        maxLength: 50,
     },
     lastName:{
         type: String,
         required: [true, 'Please provide last name'],
-        minLength: 3,
-        maxLength: 50,
     },
     dateOfBirth:{
         type: Date,
         required: [true, 'Please provide date of birth'],
-        min: '1990-1-1',
-        max: '2006-12-30',
     },
     country:{
         type: String,
         required: [true, 'Please provide country'],
-        minLength: 3,
-        maxLength: 50,
     },
 
     profile: {
         type: String,
-        default: "./profiles/demo_profile.jfif",
+        default: "./profiles/avatar.jfif",
     },
 
     resetToken: {
         type: mongoose.Types.ObjectId,
-      },
-})
+    },
+},
+{ timestamps: true }
+)
 
 UserSchema.pre('save', async function (next) {
     const salt = await bcrypt.genSalt(10)

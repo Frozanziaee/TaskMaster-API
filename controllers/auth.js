@@ -1,18 +1,26 @@
 const User = require('../models/User')
 const {StatusCodes} = require('http-status-codes')
 const {BadRequestError, UnauthenticatedError, NotFoundError} = require('../errors')
-const ResetPassword = require ("../models/ResetPassword.js")
+const ResetPassword = require ("../models/ResetPassword")
 const crypto = require ("crypto")
-const sendMail = require ("../utils/email-sender.js")
+const sendMail = require ("../utils/email-sender")
 
-  // Register route controller
+const cookieOptions = {
+  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // seven days (and expires accepts time in date objects form)
+  httpOnly: true,
+  secure: true,
+}
+  
+// Register route controller
     const signup = async (req, res) => {
     const user = await User.create({
         ...req.body,
-        profile: `${req.protocol}://${req.hostname}:${req.port}/profiles/demo_profile.jfif`,
+        profile: `${req.protocol}://${req.hostname}:${req.port}/profiles/avatar.jfif`,
     })
      const token = user.createJWT()
-     res.status(StatusCodes.CREATED).json({user: {name: user.firstName}, token})
+     res.status(StatusCodes.CREATED)
+     .cookie('token', token, cookieOptions)
+     .json({user: {name: user.firstName}, token})
 }
 
 const signin = async (req, res) => {
@@ -33,10 +41,20 @@ const signin = async (req, res) => {
     }
     //compare password
     const token = user.createJWT()
-    res.status(StatusCodes.OK).json({user: {name: user.firstName}, token })
+    res.status(StatusCodes.OK)
+    .cookie('token', token, cookieOptions)
+    .json({user: {name: user.firstName}, token })
    
 }
 
+// Signout route controller
+const signout = async (req, res) => {
+    res.status(StatusCodes.OK)
+    .clearCookie("token", { ...cookieOptions, expires: undefined })
+    .json({ message: "Sign out successfully" });
+}
+
+// Forgot Password controller
 const forgotPassword = async (req, res) => {
     const { email } = req.body;
     if (!email) {
@@ -84,6 +102,8 @@ const resetPassword = async (req, res) => {
     res.status(StatusCodes.ACCEPTED).json({ message: "Password has been successfully changed" })
   }
 
+ 
+
 module.exports = {
-    signup, signin, forgotPassword, resetPassword
+    signup, signin, signout, forgotPassword, resetPassword, googleLogin
 }

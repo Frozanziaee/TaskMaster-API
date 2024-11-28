@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
-
-const Project = require('./Project.js')
+const Project = require('./Project')
 
 const TasksSchema = new mongoose.Schema({
     title: {
@@ -34,27 +33,27 @@ const TasksSchema = new mongoose.Schema({
    
 }, {timestamps: true})
 
-TasksSchema.post("save", async function () {
-    const projectId = this.project;
-    let fieldToInc = "";
+// TasksSchema.post("save", async function () {
+//     const projectId = this.project;
+//     let fieldToInc = "";
   
-    switch (this.status) {
-      case "completed":
-        fieldToInc = "completedTasks";
-        break;
-      case "in-progress":
-        fieldToInc = "inProgressTasks";
-        break;
-      default:
-        fieldToInc = "allTasks";
-    }
-    try {
-      await Project.findByIdAndUpdate(projectId, {
-        $inc: { [fieldToInc]: 1 },
-      });
-    } catch (error) {
-      return next(error);
-    }
-  });
+//     switch (this.status) {
+//       case "completed":
+//         fieldToInc = "completedTasks";
+//         break;
+//       case "in-progress":
+//         fieldToInc = "inProgressTasks";
+//         break;
+//       default:
+//         fieldToInc = "allTasks";
+//     }
+//     try {
+//       await Project.findByIdAndUpdate(projectId, {
+//         $inc: { [fieldToInc]: 1 },
+//       });
+//     } catch (error) {
+//       return next(error);
+//     }
+//   });
 
 module.exports = mongoose.model('Task', TasksSchema)
