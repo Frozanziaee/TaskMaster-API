@@ -7,7 +7,7 @@ const {
     forgotPassword,
     signout,
     resetPassword,
-
+  
 } = require('../controllers/auth')
 
 router.post('/signup', signup)

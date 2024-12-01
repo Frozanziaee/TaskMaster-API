@@ -105,5 +105,5 @@ const resetPassword = async (req, res) => {
  
 
 module.exports = {
-    signup, signin, signout, forgotPassword, resetPassword, googleLogin
+    signup, signin, signout, forgotPassword, resetPassword, 
 }

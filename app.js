@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/users', usersRouter)
+app.use('/api/v1/users', authenticateUser, usersRouter)
 app.use('/api/v1/tasks', authenticateUser, tasksRouter)
 app.use('/api/v1/projects', authenticateUser, projectsRouter)
 
