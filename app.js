@@ -1,18 +1,26 @@
 require('dotenv').config()
 require('express-async-errors')
-
-// Extra security packages
 const helmet = require('helmet')
 const cors = require('cors')
 const rateLimiter = require('express-rate-limit')
-const xss = require('xss-clean')
-
+const morgan = require('morgan')
+const cookieParser = require('cookie-parser')
 const express = require('express')
 const app = express()
 
 // connectDB
 const connectDB = require('./db/connect')
 const authenticateUser = require('./middleware/authentication')
+
+app.use(express.json())
+app.use(helmet())
+app.use(cookieParser())
+app.use(morgan('dev'))
+app.use(express.static('public'))
+app.use(cors({
+  credentials: true,
+  origin: process.env.FRONTEND_URL,
+}))
 
 //routers
 const authRouter = require('./routes/auth')
@@ -30,13 +38,6 @@ app.use(
     max: 100 // limit each IP to 100 requests per windowMs
   })
 )
-app.use(express.json())
-app.use(helmet())
-app.use(xss())
-app.use(cors({
-  credentials: true,
-  origin: process.env.FRONTEND_URL,
-}))
 
 // app.use((req, res) => {
 //   res.send("task master api")
