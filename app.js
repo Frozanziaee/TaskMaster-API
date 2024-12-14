@@ -39,10 +39,6 @@ app.use(
   })
 )
 
-// app.use((req, res) => {
-//   res.send("task master api")
-// })
-
 app.use((req, res, next) => {
   console.log("REQUEST BODY", req.body)
   req.port = port
