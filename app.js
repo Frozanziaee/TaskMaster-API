@@ -17,10 +17,21 @@ app.use(helmet())
 app.use(cookieParser())
 app.use(morgan('dev'))
 app.use(express.static('public'))
-app.use(cors({
-  credentials: true,
-  origin: process.env.FRONTEND_URL,
-}))
+// app.use(cors({
+//   credentials: true,
+//   origin: process.env.FRONTEND_URL,
+// }))
+
+const whitelist = ['https://task-master-ui-pirv.vercel.app', 'http://localhost:5173']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 //routers
 const authRouter = require('./routes/auth')
