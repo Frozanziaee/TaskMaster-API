@@ -1,7 +1,7 @@
 require('dotenv').config()
 require('express-async-errors')
 const helmet = require('helmet')
-const cors = require('cors')
+//const cors = require('cors')
 const rateLimiter = require('express-rate-limit')
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser')
@@ -17,10 +17,10 @@ app.use(helmet())
 app.use(cookieParser())
 app.use(morgan('dev'))
 app.use(express.static('public'))
-app.use(cors({
-  credentials: true,
-  origin: process.env.FRONTEND_URL,
-}))
+// app.use(cors({
+//   credentials: true,
+//   origin: process.env.FRONTEND_URL,
+// }))
 
 //routers
 const authRouter = require('./routes/auth')
