@@ -17,10 +17,10 @@ app.use(helmet())
 app.use(cookieParser())
 app.use(morgan('dev'))
 app.use(express.static('public'))
-// app.use(cors({
-//   credentials: true,
-//   origin: process.env.FRONTEND_URL,
-// }))
+app.use(cors({
+  credentials: true,
+  origin: process.env.FRONTEND_URL,
+}))
 
 //routers
 const authRouter = require('./routes/auth')
