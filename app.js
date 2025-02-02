@@ -1,7 +1,7 @@
 require('dotenv').config()
 require('express-async-errors')
 const helmet = require('helmet')
-//const cors = require('cors')
+const cors = require('cors')
 const rateLimiter = require('express-rate-limit')
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser')
@@ -17,10 +17,7 @@ app.use(helmet())
 app.use(cookieParser())
 app.use(morgan('dev'))
 app.use(express.static('public'))
-// app.use(cors({
-//   credentials: true,
-//   origin: process.env.FRONTEND_URL,
-// }))
+
 
 const whitelist = ['https://task-master-ui-pirv.vercel.app', 'http://localhost:5173']
 const corsOptions = {
@@ -32,6 +29,11 @@ const corsOptions = {
     }
   }
 }
+
+app.use(cors({
+  credentials: true,
+  origin: corsOptions,
+}))
 
 //routers
 const authRouter = require('./routes/auth')
