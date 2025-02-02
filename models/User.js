@@ -27,11 +27,11 @@ const UserSchema = new mongoose.Schema({
     },
     dateOfBirth:{
         type: Date,
-        required: [true, 'Please provide date of birth'],
+        //required: [true, 'Please provide date of birth'],
     },
     country:{
         type: String,
-        required: [true, 'Please provide country'],
+        //required: [true, 'Please provide country'],
     },
 
     profile: {
